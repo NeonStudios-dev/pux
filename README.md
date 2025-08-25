@@ -15,7 +15,7 @@ Extra tools and shortcuts to extend Arch Linux’s `pacman` with quality-of-life
 ## 🚀 Installation
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/pux.git
+git clone https://github.com/neonstudios-dev/pux.git
 cd pux
 
 # Install (example, adjust if needed)
