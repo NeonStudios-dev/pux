@@ -1,9 +1,9 @@
 using System;
 using System.Diagnostics;
 
-namespace pux.termmgr;
+namespace pux;
 
-public class termmgr
+public class rx
 {
     public static void ExecuteCommand(string command, bool root)
     {
@@ -11,7 +11,7 @@ public class termmgr
         {
             string fileName;
             string arguments;
-            
+
             if (root)
             {
                 fileName = "sudo";
@@ -22,7 +22,7 @@ public class termmgr
                 fileName = "/bin/bash";
                 arguments = $"-c \"{command}\"";
             }
-            
+
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
                 FileName = fileName,
@@ -32,7 +32,7 @@ public class termmgr
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
-            
+
             using (Process process = Process.Start(startInfo))
             {
                 while (!process.StandardOutput.EndOfStream)
@@ -41,14 +41,14 @@ public class termmgr
                     if (line != null)
                         Console.WriteLine(line);
                 }
-                
+
                 while (!process.StandardError.EndOfStream)
                 {
                     string line = process.StandardError.ReadLine();
                     if (line != null)
                         Console.WriteLine(line);
                 }
-                
+
                 process.WaitForExit();
             }
         }
