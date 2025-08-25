@@ -25,9 +25,11 @@ while (true)
 │  ► Exit                        [0]    │
 └───────────────────────────────────────┘
 ");
-    
+
+#pragma warning disable CS8600
     string choice = Console.ReadLine();
-    
+#pragma warning restore CS8600
+
     if (choice == "1")
     {
         Console.Clear();
@@ -46,7 +48,7 @@ while (true)
     }
     else if (choice == "3")
     {
-        pux.Fixes.LoadKeyFix();
+        Fixes.LoadKeyFix();
     }
     else if (choice == "4")
     {
