@@ -9,9 +9,11 @@
   <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
   <PublishTrimmed>true</PublishTrimmed>
   <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-  <TrimMode>link</TrimMode>
-  <Version>1.0.4</Version>
-  <AssemblyVersion>1.0.4</AssemblyVersion>
+  <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+  <DebugType>embedded</DebugType>
+  <TrimMode>partial</TrimMode>
+  <Version>1.0.5</Version>
+  <AssemblyVersion>1.0.5</AssemblyVersion>
 </PropertyGroup>
 <ItemGroup>
   <PackageReference Include="Newtonsoft.Json" Version="13.0.4-beta1" />

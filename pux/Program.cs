@@ -41,7 +41,7 @@ namespace pux
             }
             else if (args.Length > 0 && args[0] == "syncdb")
             {
-                rx.ExecuteCommand("sudo pacman -Syy", true);
+                rx.ExecuteCommand("pacman -Syy --noconfirm", true);
                 return;
             }
             else if (args.Length > 0 && args[0] == "ipkgm")
@@ -77,7 +77,7 @@ namespace pux
         }
         public static void Mmenu()
         {
-            float v = 0.5f;
+            float v = 0.6f;
             {
                 while (true)
                 {
