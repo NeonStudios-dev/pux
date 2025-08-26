@@ -5,8 +5,6 @@ namespace pux
     {
         public static void Main(string[] args)
         {
-            //?Placeholder
-            //TODO: ADD ARGUMENTS FOR QUICK ACCESS AND / OR AUTOMATION
             Mmenu();
         }
         public static void Mmenu()
@@ -17,7 +15,7 @@ namespace pux
                 {
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine(@"
+                    Console.Write(@"
 ██████╗ ██╗   ██╗██╗  ██╗
 ██╔══██╗██║   ██║╚██╗██╔╝
 ██████╔╝██║   ██║ ╚███╔╝ 
@@ -26,8 +24,7 @@ namespace pux
 ╚═╝      ╚═════╝ ╚═╝  ╚═╝
 ");
                     Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.WriteLine(@$"
-┌═══════════════════════════════════════┐
+                    Console.Write(@$"┌═══════════════════════════════════════┐
 │              PUX TERMINAL             │
 │           MANAGEMENT SYSTEM   v {v}   │
 ├───────────────────────────────────────┤
