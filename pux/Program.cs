@@ -3,8 +3,9 @@ namespace pux
 {
     class pux
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            await AutoUpdater.CheckForUpdates();
             Mmenu();
         }
         public static void Mmenu()
