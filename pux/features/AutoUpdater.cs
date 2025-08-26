@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json.Linq;
-
 namespace pux;
 
 public class AutoUpdater

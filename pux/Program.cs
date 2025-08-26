@@ -25,7 +25,8 @@ namespace pux
 ╚═╝      ╚═════╝ ╚═╝  ╚═╝
 ");
                     Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.Write(@$"┌═══════════════════════════════════════┐
+                    Console.Write(@$"
+┌═══════════════════════════════════════┐
 │              PUX TERMINAL             │
 │           MANAGEMENT SYSTEM   v {v}   │
 ├───────────────────────────────────────┤
