@@ -10,8 +10,8 @@
   <PublishTrimmed>true</PublishTrimmed>
   <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   <TrimMode>link</TrimMode>
-  <Version>1.0.1</Version>
-  <AssemblyVersion>1.0.1</AssemblyVersion>
+  <Version>1.0.3</Version>
+  <AssemblyVersion>1.0.3</AssemblyVersion>
 </PropertyGroup>
 <ItemGroup>
   <PackageReference Include="Newtonsoft.Json" Version="13.0.4-beta1" />
