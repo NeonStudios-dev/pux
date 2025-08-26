@@ -11,7 +11,7 @@ namespace pux.core
     {
         public static void ShowMainMenu()
         {
-            float v = 0.6f;
+            float v = 0.7f;
             {
                 while (true)
                 {
