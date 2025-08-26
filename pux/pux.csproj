@@ -7,13 +7,9 @@
   <PublishSingleFile>true</PublishSingleFile>
   <SelfContained>true</SelfContained>
   <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-  <PublishTrimmed>true</PublishTrimmed>
   <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-  <DebugType>embedded</DebugType>
-  <TrimMode>partial</TrimMode>
-  <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+  <PublishReadyToRun>true</PublishReadyToRun>
   <InvariantGlobalization>true</InvariantGlobalization>
-  <StripSymbols>true</StripSymbols>
   <Version>1.0.5</Version>
   <AssemblyVersion>1.0.5</AssemblyVersion>
 </PropertyGroup>
