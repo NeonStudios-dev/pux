@@ -10,7 +10,7 @@ namespace pux
         }
         public static void Mmenu()
         {
-            float v = 0.4f;
+            float v = 0.5f;
             {
                 while (true)
                 {

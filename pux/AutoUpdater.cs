@@ -18,18 +18,17 @@ public class AutoUpdater
     {
         try
         {
+            Console.WriteLine("Checking for updates...");
             Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0, 0, 0);
             
-            using var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{Owner}/{Repo}/releases");
-            request.Headers.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Pux", currentVersion.ToString()));
+            client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Pux", "1.0"));
             if (!string.IsNullOrEmpty(GitHubToken))
             {
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GitHubToken);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GitHubToken);
             }
 
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine("Checking for updates...");
-            
+            using var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{Owner}/{Repo}/releases");
             using var response = await client.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
             
@@ -101,15 +100,16 @@ public class AutoUpdater
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Downloading update...");
 
-            string platform = RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ? "linux-x64" : 
-                            RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "win-x64" : "osx-x64";
-            
             var assets = releaseInfo["assets"] as JArray;
-            var asset = assets?.FirstOrDefault(a => a["name"]?.ToString().Contains(platform) ?? false);
-            
+            if (assets == null || assets.Count == 0)
+            {
+                throw new Exception("No assets found in the release");
+            }
+
+            var asset = assets.FirstOrDefault(a => a["name"]?.ToString() == "pux");
             if (asset == null)
             {
-                throw new Exception($"No release found for platform: {platform}");
+                throw new Exception("Could not find 'pux' executable in release assets");
             }
 
             string downloadUrl = asset["browser_download_url"]?.ToString() ?? "";
