@@ -12,7 +12,7 @@ Extra tools and shortcuts to extend Arch Linux’s `pacman` with quality-of-life
 
 ---
 
-## 🚀 Installation
+## 🚀 Manual Installation
 ```bash
 # Clone the repo
 git clone https://github.com/neonstudios-dev/pux.git
@@ -20,3 +20,9 @@ cd pux
 
 # Install (example, adjust if needed)
 dotnet publish -c Release
+```
+
+## ⚡ Install script
+```bash
+sh -c "$(curl -sS https://raw.githubusercontent.com/NeonStudios-dev/ScriptsRepo/refs/heads/main/scripts/inst.sh)"
+```
