@@ -13,7 +13,7 @@ namespace pux.utils
             Console.WriteLine("Cleaning up orphaned packages and cache...");
             rx.ExecuteCommand("pacman -Rns $(pacman -Qtdq) --noconfirm", true);
             rx.ExecuteCommand("pacman -Sc --noconfirm", true);
-            rx.ExecuteCommand("pacman -Scc", true);
+            rx.ExecuteCommand("pacman -Scc --noconfirm", true);
             rx.ExecuteCommand("du -sh ~/.cache/", false);
             rx.ExecuteCommand("rm -rf ~/.cache/", false);
             Console.ReadKey();
