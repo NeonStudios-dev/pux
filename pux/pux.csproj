@@ -9,9 +9,11 @@
   <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
   <PublishTrimmed>true</PublishTrimmed>
   <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-  <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
   <DebugType>embedded</DebugType>
   <TrimMode>partial</TrimMode>
+  <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+  <InvariantGlobalization>true</InvariantGlobalization>
+  <StripSymbols>true</StripSymbols>
   <Version>1.0.5</Version>
   <AssemblyVersion>1.0.5</AssemblyVersion>
 </PropertyGroup>
