@@ -5,11 +5,13 @@ namespace pux
     {
         public static void Main(string[] args)
         {
-            //Placeholder
+            //?Placeholder
             //TODO: ADD ARGUMENTS FOR QUICK ACCESS AND / OR AUTOMATION
+            Mmenu();
         }
         public static void Mmenu()
         {
+            float v = 0.4f;
             {
                 while (true)
                 {
@@ -24,17 +26,17 @@ namespace pux
 ╚═╝      ╚═════╝ ╚═╝  ╚═╝
 ");
                     Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.WriteLine(@"
+                    Console.WriteLine(@$"
 ┌═══════════════════════════════════════┐
 │              PUX TERMINAL             │
-│           MANAGEMENT SYSTEM   v 0.2   │
+│           MANAGEMENT SYSTEM   v {v}   │
 ├───────────────────────────────────────┤
 │                                       │    
 │  ► Update System               [1]    │
 │  ► Remove DB Lock              [2]    │
 │  ► Fix Pacman Keys             [3]    │
 │  ► Install Package manager     [4]    │
-│  ► About                       [5]    |
+│  ► About                       [5]    │
 │  ► Exit                        [0]    │
 └───────────────────────────────────────┘
 ");
