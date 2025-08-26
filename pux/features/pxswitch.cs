@@ -4,39 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace pux
+namespace pux.features
 {
     public class pxswitch
     {
-        public static void LoadMenu()
-        {
-            Console.Clear();
-            Console.WriteLine(@"► Install yay (yet another yogurt) [1]");
-            Console.WriteLine(@"► Install paru                     [2]");
-            Console.WriteLine(@"► Install aurutils                 [3]");
-            Console.WriteLine(@"► Install pikaur                   [4]");
-            Console.WriteLine(@"► Back                             [0]");
-
-            string choice = Console.ReadLine();
-            switch (choice)
-            {
-                case "1":
-                    install("yay");
-                    break;
-                case "2":
-                    install("paru");
-                    break;
-                case "3":
-                    install("aurutils");
-                    break;
-                case "4":
-                    install("pikaur");
-                    break;
-                case "0":
-                    pux.Mmenu();
-                    break;
-            }
-        }
+        
         public static void install(string manager)
         {
             switch (manager)
