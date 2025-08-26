@@ -55,6 +55,7 @@ public class AutoUpdater
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("No releases found. You might be running a development version.");
+                
                 Thread.Sleep(2000);
                 return;
             }
