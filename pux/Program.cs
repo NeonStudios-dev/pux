@@ -3,7 +3,11 @@ namespace pux
 {
     class pux
     {
-        public static void Main(string[] args){}
+        public static void Main(string[] args)
+        {
+            //Placeholder
+            //TODO: ADD ARGUMENTS FOR QUICK ACCESS AND / OR AUTOMATION
+        }
         public static void Mmenu()
         {
             {
