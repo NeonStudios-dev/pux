@@ -26,3 +26,10 @@ dotnet publish -c Release
 ```bash
 sh -c "$(curl -sS https://raw.githubusercontent.com/NeonStudios-dev/ScriptsRepo/refs/heads/main/scripts/inst.sh)"
 ```
+---
+# TODO
+
+- [ ] Add arguments for quick access and/or automation  
+- [ ] Fix output of compilers not shown  
+- [ ] Clear up code  
+- [ ] (MAY BE SCRAPED) Add AutoUpdater?  
