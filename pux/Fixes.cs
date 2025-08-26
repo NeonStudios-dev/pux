@@ -10,7 +10,7 @@ namespace pux
             Console.WriteLine("If you want to continue press any key");
             Console.ReadLine();
             rx.ExecuteCommand("rm -r /etc/pacman.d/gnupg", true);
-            rx.ExecuteCommand("pacman -Sy gnupg archlinux-keyring", true);
+            rx.ExecuteCommand("pacman -Sy --needed --noconfirm gnupg archlinux-keyring", true);
             rx.ExecuteCommand("pacman-key --init", true);
             rx.ExecuteCommand("pacman-key --populate archlinux", true);
             rx.ExecuteCommand("pacman-key --refresh-keys", true);
