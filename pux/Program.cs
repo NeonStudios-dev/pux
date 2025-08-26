@@ -21,6 +21,11 @@ namespace pux.root
 
         public static void Main(string[] args)
         {
+            Task.Run(async () =>
+            {
+                await AutoUpdater.CheckForUpdates();
+            }).GetAwaiter().GetResult();
+            
             if (IsRunningAsRoot())
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -71,11 +76,7 @@ namespace pux.root
                 return;
             }
 
-            Task.Run(async () =>
-            {
-                await AutoUpdater.CheckForUpdates();
-            }).GetAwaiter().GetResult();
-            
+
             core.menus.ShowMainMenu();
         }
 

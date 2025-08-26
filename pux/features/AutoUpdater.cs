@@ -4,6 +4,11 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json.Linq;
+using System.IO;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Threading;
+
 namespace pux;
 
 public class AutoUpdater
@@ -11,7 +16,7 @@ public class AutoUpdater
     private static readonly HttpClient client = new HttpClient();
     private const string Owner = "NeonStudios-dev";
     private const string Repo = "pux";
-    private const string GitHubToken = ""; // Optional: Add your GitHub token here
+    private const string GitHubToken = "";
     
     public static async Task CheckForUpdates()
     {
@@ -120,20 +125,44 @@ public class AutoUpdater
                 throw new Exception("Could not determine current executable path");
             }
 
-            byte[] newVersion = await client.GetByteArrayAsync(downloadUrl);
+            string tempDir = Path.GetTempPath();
+            string tempFilePath = Path.Combine(tempDir, "pux_update");
             
-            string backupPath = currentExePath + ".backup";
-            if (File.Exists(backupPath))
-            {
-                File.Delete(backupPath);
-            }
-            File.Move(currentExePath, backupPath);
-
-            await File.WriteAllBytesAsync(currentExePath, newVersion);
+            Console.WriteLine("Downloading new version...");
+            byte[] newVersion = await client.GetByteArrayAsync(downloadUrl);
+            await File.WriteAllBytesAsync(tempFilePath, newVersion);
             
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                rx.ExecuteCommand($"chmod +x \"{currentExePath}\"", false);
+                var chmodProcess = Process.Start(new ProcessStartInfo
+                {
+                    FileName = "chmod",
+                    Arguments = $"+x \"{tempFilePath}\"",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                });
+                await chmodProcess.WaitForExitAsync();
+            }
+
+            bool needsSudo = IsSystemPath(currentExePath);
+            
+            if (needsSudo && RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Administrator privileges required for update. Please enter your password when prompted.");
+                Console.ResetColor();
+                
+                await UpdateWithSudo(currentExePath, tempFilePath);
+            }
+            else
+            {
+                await UpdateWithoutElevation(currentExePath, tempFilePath);
+            }
+
+            if (File.Exists(tempFilePath))
+            {
+                File.Delete(tempFilePath);
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -153,6 +182,104 @@ public class AutoUpdater
         finally
         {
             Console.ResetColor();
+        }
+    }
+
+    private static bool IsSystemPath(string path)
+    {
+        var systemPaths = new[]
+        {
+            "/usr/local/bin",
+            "/usr/bin",
+            "/bin",
+            "/sbin",
+            "/usr/sbin"
+        };
+
+        return systemPaths.Any(systemPath => 
+            path.StartsWith(systemPath, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static async Task UpdateWithSudo(string currentExePath, string tempFilePath)
+    {
+        string backupPath = currentExePath + ".backup";
+        
+        string scriptContent = $@"#!/bin/bash
+if [ -f ""{backupPath}"" ]; then
+    rm ""{backupPath}""
+fi
+mv ""{currentExePath}"" ""{backupPath}""
+
+cp ""{tempFilePath}"" ""{currentExePath}""
+chmod +x ""{currentExePath}""
+
+echo ""Update completed successfully!""
+";
+
+        string scriptPath = Path.Combine(Path.GetTempPath(), "pux_update_script.sh");
+        await File.WriteAllTextAsync(scriptPath, scriptContent);
+        
+        var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = "sudo",
+                Arguments = $"bash \"{scriptPath}\"",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                RedirectStandardInput = false
+            }
+        };
+
+        process.Start();
+        
+        string output = await process.StandardOutput.ReadToEndAsync();
+        string error = await process.StandardError.ReadToEndAsync();
+        
+        await process.WaitForExitAsync();
+        
+        // Cleanup script
+        if (File.Exists(scriptPath))
+        {
+            File.Delete(scriptPath);
+        }
+
+        if (process.ExitCode != 0)
+        {
+            throw new Exception($"Sudo update failed: {error}");
+        }
+        
+        Console.WriteLine(output);
+    }
+
+
+
+    private static async Task UpdateWithoutElevation(string currentExePath, string tempFilePath)
+    {
+        string backupPath = currentExePath + ".backup";
+        
+        // Simple file replacement
+        if (File.Exists(backupPath))
+        {
+            File.Delete(backupPath);
+        }
+        
+        File.Move(currentExePath, backupPath);
+        File.Copy(tempFilePath, currentExePath);
+        
+        // Make executable on Linux
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            var chmodProcess = Process.Start(new ProcessStartInfo
+            {
+                FileName = "chmod",
+                Arguments = $"+x \"{currentExePath}\"",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            });
+            await chmodProcess.WaitForExitAsync();
         }
     }
 }
