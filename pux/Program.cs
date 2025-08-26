@@ -23,7 +23,7 @@ namespace pux
                     Console.WriteLine(@"
 ┌═══════════════════════════════════════┐
 │              PUX TERMINAL             │
-│           MANAGEMENT SYSTEM   v 0.1   │
+│           MANAGEMENT SYSTEM   v 0.2   │
 ├───────────────────────────────────────┤
 │                                       │    
 │  ► Update System               [1]    │
