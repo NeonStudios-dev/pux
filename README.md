@@ -29,7 +29,7 @@ sh -c "$(curl -sS https://raw.githubusercontent.com/NeonStudios-dev/ScriptsRepo/
 ---
 # TODO
 
-- [ ] Add arguments for quick access and/or automation  
+- [x] Add arguments for quick access and/or automation  
 - [ ] Fix output of compilers not shown  
 - [ ] Clear up code  
-- [ ] (MAY BE SCRAPED) Add AutoUpdater?  
+- [x] (MAY BE SCRAPED) Add AutoUpdater?  
