@@ -1,13 +1,7 @@
-using System;
 using System.Diagnostics;
-using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json.Linq;
-using System.IO;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Threading;
 
 namespace pux;
 
@@ -239,7 +233,6 @@ echo ""Update completed successfully!""
         
         await process.WaitForExitAsync();
         
-        // Cleanup script
         if (File.Exists(scriptPath))
         {
             File.Delete(scriptPath);
@@ -259,7 +252,6 @@ echo ""Update completed successfully!""
     {
         string backupPath = currentExePath + ".backup";
         
-        // Simple file replacement
         if (File.Exists(backupPath))
         {
             File.Delete(backupPath);
@@ -268,7 +260,6 @@ echo ""Update completed successfully!""
         File.Move(currentExePath, backupPath);
         File.Copy(tempFilePath, currentExePath);
         
-        // Make executable on Linux
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
             var chmodProcess = Process.Start(new ProcessStartInfo

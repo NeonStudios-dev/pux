@@ -10,8 +10,8 @@
   <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   <PublishReadyToRun>true</PublishReadyToRun>
   <InvariantGlobalization>true</InvariantGlobalization>
-  <Version>1.0.7</Version>
-  <AssemblyVersion>1.0.7</AssemblyVersion>
+  <Version>1.0.8</Version>
+  <AssemblyVersion>1.0.8</AssemblyVersion>
 </PropertyGroup>
 <ItemGroup>
   <PackageReference Include="Newtonsoft.Json" Version="13.0.4-beta1" />

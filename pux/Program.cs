@@ -1,5 +1,5 @@
 ﻿using System.Runtime.InteropServices;
-namespace pux.root
+namespace pux.core
 {
     class pux
     {

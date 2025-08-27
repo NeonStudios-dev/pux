@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using pux.features;
 using pux.utils;
 
@@ -11,7 +7,7 @@ namespace pux.core
     {
         public static void ShowMainMenu()
         {
-            float v = 0.7f;
+            float v = 0.8f;
             string[] menuItems = {
                 "Update System",
                 "Remove DB Lock",
