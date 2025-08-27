@@ -12,12 +12,25 @@ namespace pux.core
         public static void ShowMainMenu()
         {
             float v = 0.7f;
+            string[] menuItems = {
+                "Update System",
+                "Remove DB Lock",
+                "Fix Pacman Keys",
+                "Install Package manager",
+                "Sync database",
+                "Clean system",
+                "About",
+                "Exit"
+            };
+            
+            int selectedIndex = 0;
+            ConsoleKeyInfo keyInfo;
+
+            while (true)
             {
-                while (true)
-                {
-                    Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write(@"
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(@"
 ██████╗ ██╗   ██╗██╗  ██╗
 ██╔══██╗██║   ██║╚██╗██╔╝
 ██████╔╝██║   ██║ ╚███╔╝ 
@@ -25,112 +38,193 @@ namespace pux.core
 ██║     ╚██████╔╝██╔╝ ██╗
 ╚═╝      ╚═════╝ ╚═╝  ╚═╝
 ");
-                    Console.ForegroundColor = ConsoleColor.Magenta;
-                    Console.Write(@$"
-┌═══════════════════════════════════════┐
-│              PUX - Pacman             │
-│                utils X        v {v}   │
-├───────────────────────────────────────┤
-│                                       │    
-│  ► Update System               [1]    │
-│  ► Remove DB Lock              [2]    │
-│  ► Fix Pacman Keys             [3]    │
-│  ► Install Package manager     [4]    │
-│  ► Sync database               [5]    │
-│  ► Clean system                [6]    │
-│  ► About                       [a]    │
-│  ► Exit                        [0]    │
-└───────────────────────────────────────┘
-");
-#pragma warning disable CS8600
-                    string choice = Console.ReadLine();
-#pragma warning restore CS8600
-                    switch (choice)
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("╭─────────────────────────────────╮");
+                Console.WriteLine($"│ PUX - Pacman Utils v{v}         │");
+                Console.WriteLine("├─────────────────────────────────┤");
+
+                for (int i = 0; i < menuItems.Length; i++)
+                {
+                    if (i == selectedIndex)
                     {
-                        case "1":
-                            Console.Clear();
-                            rx.ExecuteCommand("pacman -Syu", true);
-                            Console.WriteLine("\nPress any key to continue...");
-                            Console.ReadKey();
-                            break;
-                        case "2":
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("YOU MAY GET RATE LIMITED WHEN A INSTANCE OF PACMAN IS ALREADY RUNNING");
-                            Thread.Sleep(4000);
-                            rx.ExecuteCommand("rm -rf /var/lib/pacman/db.lck", true);
-                            Console.WriteLine("\nPress any key to continue...");
-                            Console.ReadKey();
-                            break;
-                        case "3":
-                            Fixes.LoadKeyFix();
-                            break;
-                        case "4":
-                            pkmgrMenu();
-                            break;
-                        case "5":
-                            Console.Clear();
-                            rx.ExecuteCommand("pacman -Syy --noconfirm", true);
-                            Console.WriteLine("\nPress any key to continue...");
-                            Console.ReadKey();
-                            break;
-                        case "6":
-                            Console.Clear();
-                            pmclean.LoadClean();
-                            break;
-                        case "a":
-                            Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.DarkGreen;
-                            Console.WriteLine("Developed by NeonStudios developement");
-                            Console.WriteLine("Copyright 2025 NeonStudios developement. All rights reserved.");
-                            Console.WriteLine("");
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("Press any key to continue...");
-                            Console.ReadKey();
-                            break;
-                        case "0":
-                            Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.DarkRed;
-                            Console.WriteLine("You need to press any key to Exit");
-                            Console.ReadLine();
-                            Console.Clear();
-                            Environment.Exit(0);
-                            break;
-                        default:
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Invalid option! Press any key to continue...");
-                            Console.ReadKey();
-                            break;
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.Write("│ ");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write($"► {menuItems[i],-29}");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.WriteLine(" │");
                     }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.WriteLine($"│   {menuItems[i],-29} │");
+                    }
+                }
+                
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("╰─────────────────────────────────╯");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("Use ↑↓ arrows to navigate, Enter to select");
+
+                keyInfo = Console.ReadKey(true);
+                
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : menuItems.Length - 1;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        selectedIndex = selectedIndex < menuItems.Length - 1 ? selectedIndex + 1 : 0;
+                        break;
+                    case ConsoleKey.Enter:
+                        ExecuteMenuAction(selectedIndex);
+                        break;
+                    case ConsoleKey.Escape:
+                        selectedIndex = menuItems.Length - 1;
+                        break;
                 }
             }
         }
+
+        private static void ExecuteMenuAction(int selectedIndex)
+        {
+            switch (selectedIndex)
+            {
+                case 0:
+                    Console.Clear();
+                    rx.ExecuteCommand("pacman -Syu", true);
+                    Console.WriteLine("\nPress any key to continue...");
+                    Console.ReadKey();
+                    break;
+                case 1:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("YOU MAY GET RATE LIMITED WHEN A INSTANCE OF PACMAN IS ALREADY RUNNING");
+                    Thread.Sleep(4000);
+                    rx.ExecuteCommand("rm -rf /var/lib/pacman/db.lck", true);
+                    Console.WriteLine("\nPress any key to continue...");
+                    Console.ReadKey();
+                    break;
+                case 2:
+                    Fixes.LoadKeyFix();
+                    break;
+                case 3:
+                    pkmgrMenu();
+                    break;
+                case 4:
+                    Console.Clear();
+                    rx.ExecuteCommand("pacman -Syy --noconfirm", true);
+                    Console.WriteLine("\nPress any key to continue...");
+                    Console.ReadKey();
+                    break;
+                case 5:
+                    Console.Clear();
+                    pmclean.LoadClean();
+                    break;
+                case 6:
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine("Developed by NeonStudios developement");
+                    Console.WriteLine("Copyright 2025 NeonStudios developement. All rights reserved.");
+                    Console.WriteLine("");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                    break;
+                case 7:
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine("You need to press any key to Exit");
+                    Console.ReadLine();
+                    Console.Clear();
+                    Environment.Exit(0);
+                    break;
+            }
+        }
+
         public static void pkmgrMenu()
         {
-            Console.Clear();
-            Console.WriteLine(@"► Install yay (yet another yogurt) [1]");
-            Console.WriteLine(@"► Install paru                     [2]");
-            Console.WriteLine(@"► Install aurutils                 [3]");
-            Console.WriteLine(@"► Install pikaur                   [4]");
-            Console.WriteLine(@"► Back                             [0]");
+            string[] packageManagers = {
+                "Install yay",
+                "Install paru", 
+                "Install aurutils",
+                "Install pikaur",
+                "Back"
+            };
+            
+            int selectedIndex = 0;
+            ConsoleKeyInfo keyInfo;
 
-            string choice = Console.ReadLine();
-            switch (choice)
+            while (true)
             {
-                case "1":
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("╭─────────────────────────────────╮");
+                Console.WriteLine("│     Package Manager Menu        │");
+                Console.WriteLine("├─────────────────────────────────┤");
+
+                for (int i = 0; i < packageManagers.Length; i++)
+                {
+                    if (i == selectedIndex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.Write("│ ");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write($"► {packageManagers[i],-29}");
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.WriteLine(" │");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.WriteLine($"│   {packageManagers[i],-29} │");
+                    }
+                }
+                
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("╰─────────────────────────────────╯");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("Use ↑↓ arrows to navigate, Enter to select");
+
+                keyInfo = Console.ReadKey(true);
+                
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        selectedIndex = selectedIndex > 0 ? selectedIndex - 1 : packageManagers.Length - 1;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        selectedIndex = selectedIndex < packageManagers.Length - 1 ? selectedIndex + 1 : 0;
+                        break;
+                    case ConsoleKey.Enter:
+                        ExecutePackageManagerAction(selectedIndex);
+                        if (selectedIndex == 4) return;
+                        break;
+                    case ConsoleKey.Escape:
+                        return;
+                }
+            }
+        }
+
+        private static void ExecutePackageManagerAction(int selectedIndex)
+        {
+            switch (selectedIndex)
+            {
+                case 0:
                     pxswitch.install("yay");
                     break;
-                case "2":
+                case 1:
                     pxswitch.install("paru");
                     break;
-                case "3":
+                case 2:
                     pxswitch.install("aurutils");
                     break;
-                case "4":
+                case 3:
                     pxswitch.install("pikaur");
                     break;
-                case "0":
-                    core.menus.ShowMainMenu();
-                    break;
+                case 4:
+                    return;
             }
         }
     }
