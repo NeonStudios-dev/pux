@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using pux.core;
 
 namespace pux.features
 {
     public class pxswitch
     {
-        
         public static void install(string manager)
         {
             switch (manager)
@@ -30,9 +30,9 @@ namespace pux.features
                     rx.ExecuteCommand(@"sudo pacman -S --needed --noconfirm base-devel git;git clone https://aur.archlinux.org/pikaur.git;cd pikaur;makepkg -fsri --noconfirm;cd ..;rm -rf pikaur", false);
                     break;
                 default:
-                    Console.WriteLine("Invalid");
+                    Console.WriteLine("Invalid package manager specified");
                     break;
-        } 
+            }
         }
     }
 }
