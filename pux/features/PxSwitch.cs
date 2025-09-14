@@ -7,7 +7,7 @@ using pux.core;
 
 namespace pux.features
 {
-    public class pxswitch
+    public class PxSwitch
     {
         public static void install(string manager)
         {

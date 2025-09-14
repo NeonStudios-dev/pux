@@ -23,7 +23,7 @@ namespace pux.core
             "settings.json"
         );
 
-        private static Settings instance;
+        private static Settings? instance;
         
         public ColorTheme CurrentTheme { get; set; } = new ColorTheme();
         public string ThemeName { get; set; } = "Default";
@@ -48,7 +48,7 @@ namespace pux.core
                 if (File.Exists(ConfigPath))
                 {
                     string json = File.ReadAllText(ConfigPath);
-                    return JsonSerializer.Deserialize<Settings>(json) ?? CreateDefaultSettings();
+                    return JsonSerializer.Deserialize(json, JsonContext.Default.Settings) ?? new Settings();
                 }
             }
             catch (Exception ex)
@@ -68,7 +68,7 @@ namespace pux.core
                     Directory.CreateDirectory(directoryPath);
                 }
 
-                string json = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+                string json = JsonSerializer.Serialize(this, JsonContext.Default.Settings);
                 File.WriteAllText(ConfigPath, json);
             }
             catch (Exception ex)

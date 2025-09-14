@@ -44,7 +44,7 @@ namespace pux.core
         {
             if (args.Length > 0 && args[0] == "--no-update")
             {
-                menus.ShowMainMenu();
+                Menus.ShowMainMenu();
                 return;
             }
             else if (args.Length > 0 && args[0] == "syncdb")
@@ -54,7 +54,7 @@ namespace pux.core
             }
             else if (args.Length > 0 && args[0] == "ipkgm")
             {
-                menus.pkmgrMenu();
+                Menus.pkmgrMenu();
                 return;
             }
             else if (args.Length > 0 && args[0] == "fixkeys")
@@ -64,7 +64,7 @@ namespace pux.core
             }
             else if (args.Length > 0 && args[0] == "clean")
             {
-                pmclean.LoadClean();
+                PmClean.LoadClean();
                  return;
             }
             else if (args.Length > 0 && args[0] == "theme")
@@ -76,7 +76,7 @@ namespace pux.core
                     Console.WriteLine($"Theme changed to: {args[1]}");
                     return;
                 }
-                menus.ThemeMenu();
+                Menus.ThemeMenu();
                 return;
             }
             else if (args.Length > 0 && (args[0].Equals("@S", StringComparison.OrdinalIgnoreCase) || 
@@ -164,7 +164,7 @@ namespace pux.core
             }).GetAwaiter().GetResult();
             
             Console.WriteLine("Starting PUX...");
-            menus.ShowMainMenu();
+            Menus.ShowMainMenu();
         }
     }
 }

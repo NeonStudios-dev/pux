@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace pux.utils
 {
-    public class sync
+    public class Sync
     {
         public static void SyncDatabase()
         {

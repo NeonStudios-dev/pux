@@ -17,7 +17,7 @@ public class AutoUpdater
         try
         {
             Console.WriteLine("Checking for updates...");
-            Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0, 0, 0);
+            Version currentVersion = Assembly.GetExecutingAssembly()?.GetName()?.Version ?? new Version(0, 0, 0);
             
             client.DefaultRequestHeaders.UserAgent.Add(new System.Net.Http.Headers.ProductInfoHeaderValue("Pux", "1.0"));
             if (!string.IsNullOrEmpty(GitHubToken))
@@ -112,7 +112,7 @@ public class AutoUpdater
             }
 
             string downloadUrl = asset["browser_download_url"]?.ToString() ?? "";
-            string currentExePath = Process.GetCurrentProcess().MainModule?.FileName ?? "";
+            string currentExePath = Process.GetCurrentProcess()?.MainModule?.FileName ?? "";
             
             if (string.IsNullOrEmpty(currentExePath))
             {

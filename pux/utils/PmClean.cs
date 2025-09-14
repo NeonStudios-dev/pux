@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace pux.utils
 {
-    public class pmclean
+    public class PmClean
     {
         public static void LoadClean()
         {
@@ -17,7 +17,7 @@ namespace pux.utils
             rx.ExecuteCommand("du -sh ~/.cache/", false);
             rx.ExecuteCommand("rm -rf ~/.cache/", false);
             Console.ReadKey();
-            core.menus.ShowMainMenu();
+            core.Menus.ShowMainMenu();
         }
     }
 }

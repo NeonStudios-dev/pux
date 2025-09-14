@@ -29,7 +29,7 @@ public class rx
                 startInfo.FileName = "/bin/bash";
                 startInfo.Arguments = $"-c \"{command}\"";
             }
-
+ 
             using (var process = new Process { StartInfo = startInfo })
             {
                 process.Start();
