@@ -7,6 +7,37 @@ using System.Threading;
 
 namespace pux.core
 {
+    public class KonamiCode
+    {
+        private static readonly ConsoleKey[] sequence = new ConsoleKey[]
+        {
+            ConsoleKey.UpArrow, ConsoleKey.UpArrow,
+            ConsoleKey.DownArrow, ConsoleKey.DownArrow,
+            ConsoleKey.LeftArrow, ConsoleKey.RightArrow,
+            ConsoleKey.LeftArrow, ConsoleKey.RightArrow,
+            ConsoleKey.B, ConsoleKey.A
+        };
+        private static readonly Queue<ConsoleKey> inputBuffer = new Queue<ConsoleKey>();
+        public static bool IsSecretMenuActive { get; private set; }
+
+        public static bool CheckInput(ConsoleKey key)
+        {
+            inputBuffer.Enqueue(key);
+            if (inputBuffer.Count > sequence.Length)
+                inputBuffer.Dequeue();
+
+            bool isCorrectSequence = inputBuffer.Count == sequence.Length &&
+                                   inputBuffer.SequenceEqual(sequence);
+
+            if (isCorrectSequence)
+            {
+                IsSecretMenuActive = !IsSecretMenuActive;
+                inputBuffer.Clear();
+            }
+
+            return isCorrectSequence;
+        }
+    }
     public class Menus
     {
         private class MenuCategory
@@ -32,6 +63,13 @@ namespace pux.core
                 Action = action;
             }
         }
+
+        private static readonly MenuCategory secretMenu = new MenuCategory("Secret Menu", new List<MenuItem>
+        {
+            new MenuItem("Unleash Power", () => Console.WriteLine("Ultimate power unleashed!")),
+            new MenuItem("Debug Mode", () => Console.WriteLine("Debug mode activated")),
+            new MenuItem("Easter Egg", () => Console.WriteLine("🥚 You found me!"))
+        });
 
         private static readonly List<MenuCategory> menuCategories = new List<MenuCategory>
         {
@@ -64,7 +102,7 @@ namespace pux.core
 
         public static void ShowMainMenu()
         {
-            float v = 1.0f;
+            string v = "1.1.1";
             int selectedCategoryIndex = 0;
             int selectedItemIndex = 0;
             bool inCategoryPanel = true;
@@ -92,26 +130,48 @@ namespace pux.core
 
                 keyInfo = Console.ReadKey(true);
 
+                // Check for Konami Code
+                if (KonamiCode.CheckInput(keyInfo.Key))
+                {
+                    if (KonamiCode.IsSecretMenuActive)
+                    {
+                        selectedCategoryIndex = menuCategories.Count; // Index of the Secret Menu
+                        selectedItemIndex = 0;
+                        inCategoryPanel = false;
+                    }
+                    else
+                    {
+                        selectedCategoryIndex = 0;
+                        selectedItemIndex = 0;
+                    }
+                }
+
                 switch (keyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
+                        var currentMenus = new List<MenuCategory>(menuCategories);
+                        if (KonamiCode.IsSecretMenuActive) currentMenus.Add(secretMenu);
+
                         if (inCategoryPanel)
                         {
-                            selectedCategoryIndex = (selectedCategoryIndex > 0) ? selectedCategoryIndex - 1 : menuCategories.Count - 1;
+                            selectedCategoryIndex = (selectedCategoryIndex > 0) ? selectedCategoryIndex - 1 : currentMenus.Count - 1;
                         }
                         else
                         {
-                            selectedItemIndex = (selectedItemIndex > 0) ? selectedItemIndex - 1 : menuCategories[selectedCategoryIndex].Items.Count - 1;
+                            selectedItemIndex = (selectedItemIndex > 0) ? selectedItemIndex - 1 : currentMenus[selectedCategoryIndex].Items.Count - 1;
                         }
                         break;
                     case ConsoleKey.DownArrow:
+                        currentMenus = new List<MenuCategory>(menuCategories);
+                        if (KonamiCode.IsSecretMenuActive) currentMenus.Add(secretMenu);
+
                         if (inCategoryPanel)
                         {
-                            selectedCategoryIndex = (selectedCategoryIndex < menuCategories.Count - 1) ? selectedCategoryIndex + 1 : 0;
+                            selectedCategoryIndex = (selectedCategoryIndex < currentMenus.Count - 1) ? selectedCategoryIndex + 1 : 0;
                         }
                         else
                         {
-                            selectedItemIndex = (selectedItemIndex < menuCategories[selectedCategoryIndex].Items.Count - 1) ? selectedItemIndex + 1 : 0;
+                            selectedItemIndex = (selectedItemIndex < currentMenus[selectedCategoryIndex].Items.Count - 1) ? selectedItemIndex + 1 : 0;
                         }
                         break;
                     case ConsoleKey.LeftArrow:
@@ -123,17 +183,23 @@ namespace pux.core
                     case ConsoleKey.Enter:
                         if (!inCategoryPanel)
                         {
-                            var action = menuCategories[selectedCategoryIndex].Items[selectedItemIndex].Action;
+                            currentMenus = new List<MenuCategory>(menuCategories);
+                            if (KonamiCode.IsSecretMenuActive) currentMenus.Add(secretMenu);
+                            var action = currentMenus[selectedCategoryIndex].Items[selectedItemIndex].Action;
                             action.Invoke();
                         }
                         break;
                     case ConsoleKey.Escape:
                         selectedCategoryIndex = menuCategories.FindIndex(c => c.Name == "Program");
-                        if(selectedCategoryIndex != -1){
+                        if (selectedCategoryIndex != -1)
+                        {
                             selectedItemIndex = menuCategories[selectedCategoryIndex].Items.FindIndex(i => i.Name == "Exit");
-                            if(selectedItemIndex != -1){
+                            if (selectedItemIndex != -1)
+                            {
                                 inCategoryPanel = false;
-                                menuCategories[selectedCategoryIndex].Items[selectedItemIndex].Action.Invoke();
+                                var exitMenus = new List<MenuCategory>(menuCategories);
+                                if (KonamiCode.IsSecretMenuActive) exitMenus.Add(secretMenu);
+                                exitMenus[selectedCategoryIndex].Items[selectedItemIndex].Action.Invoke();
                             }
                         }
                         break;
@@ -151,16 +217,22 @@ namespace pux.core
             Console.Write(new string('─', itemPanelWidth));
             Console.WriteLine("┐");
 
-            int maxRows = Math.Max(menuCategories.Count, menuCategories.Select(c => c.Items.Count).DefaultIfEmpty(0).Max());
+            var displayCategories = new List<MenuCategory>(menuCategories);
+            if (KonamiCode.IsSecretMenuActive)
+            {
+                displayCategories.Add(secretMenu);
+            }
+
+            int maxRows = Math.Max(displayCategories.Count, displayCategories.Select(c => c.Items.Count).DefaultIfEmpty(0).Max());
 
 
             for (int i = 0; i < maxRows; i++)
             {
                 Console.Write("│");
-                if (i < menuCategories.Count)
+                if (i < displayCategories.Count)
                 {
                     bool isSelectedCategory = (i == selectedCategoryIndex);
-                    string text = menuCategories[i].Name;
+                    string text = displayCategories[i].Name;
                     string toPrint;
                     if (isSelectedCategory && inCategoryPanel)
                     {
@@ -181,10 +253,10 @@ namespace pux.core
                 Console.ForegroundColor = Settings.Instance.CurrentTheme.PrimaryColor;
                 Console.Write("│");
 
-                if (i < menuCategories[selectedCategoryIndex].Items.Count)
+                if (i < displayCategories[selectedCategoryIndex].Items.Count)
                 {
                     bool isSelectedItem = (i == selectedItemIndex);
-                    string text = menuCategories[selectedCategoryIndex].Items[i].Name;
+                    string text = displayCategories[selectedCategoryIndex].Items[i].Name;
                     string toPrint;
                     if (isSelectedItem && !inCategoryPanel)
                     {
